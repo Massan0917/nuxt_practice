@@ -1,0 +1,24 @@
+version: '3.9'
+
+services:
+  nuxt:
+    container_name: nuxt
+    build: docker/nuxt
+    volumes:
+      - ./front:/app:cached
+      - nuxt_node_modules:/app/node_modules
+    ports:
+      - "80:3000"
+      - "24678:24678"
+      - "4000:4000"
+      - "8080:8080"  # Firestore エミュレータのポート
+      - "4400:4400"  # Emulator Hub のポート
+    tty: true
+    environment:
+      - HOST=0.0.0.0
+      - port=80
+      - CHOKIDAR_USEPOLLING=true
+      - FIRESTORE_EMULATOR_HOST=0.0.0.0:8080  # すべてのネットワークインターフェースでリッスン
+
+volumes:
+  nuxt_node_modules:
